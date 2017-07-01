@@ -16,9 +16,8 @@ public class GUI {
     public GUI() {
 
         jFrame = new JFrame("Sudoku");
-        disegnaMenu();
-        //disegnaMatrice(Matrice.caricaMatriceByFile("src/file/1"));
-
+        //disegnaMenu();
+        //disegnaMatrice(Matrice.caricaMatriceByFile("src/file/2"));
     }
 
     public void aggiungiPanel(JFrame jFrame, JPanel newJPanel) {
@@ -65,13 +64,15 @@ public class GUI {
             }
         }
         aggiungiPanel(jFrame, jPanelMatrice);
+
     }
 
     public void disegnaMenu() {
         jPanel = new JPanel();
-        aggiungiPanel(jFrame, jPanel);
 
         int length = new File("src/file").listFiles().length;
+
+        int scelta = 0;
 
         for (int i = 1; i <= length; i++) {
             int finalI = i;
@@ -83,15 +84,13 @@ public class GUI {
                 public void actionPerformed(ActionEvent e) {
                     int matrice[][] = caricaMatrice(finalI);
 
-                    if (matrice != null) {
-                        disegnaMatrice(matrice);
-                    } else {
+                    disegnaMatrice(matrice);
 
-                    }
                 }
             });
-
             jPanel.add(button);
         }
+        aggiungiPanel(jFrame, jPanel);
     }
+
 }
