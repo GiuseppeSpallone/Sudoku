@@ -1,11 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
 import java.io.File;
 
 public class GUI {
-    private JPanel jPanel;
+    private JPanel jPanelMenu;
     private JPanel jPanelMatrice;
     private JFrame jFrame;
 
@@ -14,13 +15,37 @@ public class GUI {
     public static final Font FONT_NUMBERS = new Font("Monospaced", Font.BOLD, 20);
 
     public GUI() {
-
         jFrame = new JFrame("Sudoku");
-        //disegnaMenu();
-        //disegnaMatrice(Matrice.caricaMatriceByFile("src/file/2"));
+        disegnaMenu();
     }
 
-    public void aggiungiPanel(JFrame jFrame, JPanel newJPanel) {
+    private void aggiungiMenuBar(JFrame jFrame, int matrice[][]) {
+        JButton jButtonRisolvi = new JButton("RISOLVI");
+        JButton jButtonEsci = new JButton("ESCI");
+
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(jButtonRisolvi);
+        menuBar.add(jButtonEsci);
+        jFrame.setJMenuBar(menuBar);
+
+        jButtonEsci.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jFrame.setJMenuBar(null);
+                disegnaMenu();
+            }
+        });
+
+        jButtonRisolvi.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                risolvi(matrice);
+                disegnaMatrice(matrice);
+            }
+        });
+    }
+
+    private void aggiungiPanel(JFrame jFrame, JPanel newJPanel) {
         jFrame.setContentPane(newJPanel);
         jFrame.setSize(500, 500);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,20 +54,19 @@ public class GUI {
         jFrame.repaint();
     }
 
-    /*public void rimuoviPanel(JFrame jFrame, JPanel oldJPanel) {
-        jFrame.removeAll();
-    }*/
-
-    public int[][] caricaMatrice(int scelta) {
+    private int[][] caricaMatrice(int scelta) {
         int matrice[][] = Matrice.caricaMatriceByFile("src/file/" + scelta);
         return matrice;
     }
 
-    public void disegnaMatrice(int matrice[][]) {
-        //rimuoviPanel(jFrame, jPanel);
+    private void disegnaMatrice(int matrice[][]) {
+
+        aggiungiMenuBar(jFrame, matrice);
 
         jPanelMatrice = new JPanel();
         jPanelMatrice.setLayout(new GridLayout(9, 9));
+        jPanelMatrice.setFocusable(true);
+        jPanelMatrice.requestFocusInWindow();
 
         JTextField[][] cella = new JTextField[9][9];
 
@@ -63,34 +87,54 @@ public class GUI {
                 jPanelMatrice.add(cella[riga][colonna]);
             }
         }
+
         aggiungiPanel(jFrame, jPanelMatrice);
+
+        Matrice.stampaMatrice(matrice);
 
     }
 
-    public void disegnaMenu() {
-        jPanel = new JPanel();
+    private void disegnaMenu() {
+        jPanelMenu = new JPanel();
+        jPanelMenu.setBackground(Color.WHITE);
 
-        int length = new File("src/file").listFiles().length;
+        int num_matrici = new File("src/file").listFiles().length;
 
-        int scelta = 0;
+        for (int i = 0; i < num_matrici; i++) {
 
-        for (int i = 1; i <= length; i++) {
-            int finalI = i;
+            JButton jButton = new JButton("MATRICE " + (i + 1));
 
-            Button button = new Button("MATRICE " + i);
+            int finalI = i + 1;
 
-            button.addActionListener(new ActionListener() {
+            jButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     int matrice[][] = caricaMatrice(finalI);
-
                     disegnaMatrice(matrice);
-
                 }
             });
-            jPanel.add(button);
+
+            jPanelMenu.add(jButton);
         }
-        aggiungiPanel(jFrame, jPanel);
+
+        ImageIcon imageIcon = new ImageIcon("src/altro/sudoku.png");
+        JLabel label = new JLabel("", imageIcon, JLabel.CENTER);
+        jPanelMenu.add(label);
+
+        aggiungiPanel(jFrame, jPanelMenu);
+
+
+    }
+
+    private void risolvi(int matrice[][]) {
+        Risolutore risolutore = new Risolutore(matrice);
+        boolean solved = risolutore.solve(new Risolutore.Cella(0, 0));
+
+        if (!solved) {
+            JOptionPane.showMessageDialog(null, "Impossibile risolvere il Sudoku");
+        } else {
+            JOptionPane.showMessageDialog(null, "Risolto");
+        }
     }
 
 }
