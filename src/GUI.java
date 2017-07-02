@@ -121,8 +121,20 @@ public class GUI {
         JLabel label = new JLabel("", imageIcon, JLabel.CENTER);
         jPanelMenu.add(label);
 
-        aggiungiPanel(jFrame, jPanelMenu);
+        JButton jButtonCarica = new JButton("CARICA FILE");
 
+        jButtonCarica.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String path = Matrice.apriMatrice();
+                int matrice[][] = Matrice.caricaMatriceByFile(path);
+                disegnaMatrice(matrice);
+            }
+        });
+
+        jPanelMenu.add(jButtonCarica);
+
+        aggiungiPanel(jFrame, jPanelMenu);
 
     }
 

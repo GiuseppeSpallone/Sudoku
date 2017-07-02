@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.File;
 import java.util.Scanner;
 
@@ -30,9 +31,8 @@ public class Matrice {
         return matrice;
     }
 
-
     public static void stampaMatrice(int matrice[][]) {
-        if(matrice != null){
+        if (matrice != null) {
             int righe = 9;
             int colonne = 9;
 
@@ -48,11 +48,22 @@ public class Matrice {
                 System.out.println("|");
             }
             System.out.println(" -----------------------");
-        }else{
+        } else {
             System.out.println("Matrice vuota o non esistente");
         }
 
     }
 
+    public static String apriMatrice() {
+        JFileChooser jFileChooser = new JFileChooser();
+
+        if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File file = jFileChooser.getSelectedFile();
+            String path = file.getPath();
+            return path;
+        } else {
+            return null;
+        }
+    }
 }
 
