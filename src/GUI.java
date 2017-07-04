@@ -10,6 +10,7 @@ public class GUI {
     private JPanel jPanelMatrice;
     private JFrame jFrame;
 
+    public static final int DIM_MATRICE = 9;
     public static final Color OPEN_CELL_BGCOLOR = Color.WHITE;
     public static final Color CLOSED_CELL_BGCOLOR = Color.LIGHT_GRAY;
     public static final Font FONT_NUMBERS = new Font("Monospaced", Font.BOLD, 20);
@@ -64,18 +65,29 @@ public class GUI {
         aggiungiMenuBar(jFrame, matrice);
 
         jPanelMatrice = new JPanel();
-        jPanelMatrice.setLayout(new GridLayout(9, 9));
+        jPanelMatrice.setLayout(new GridLayout(DIM_MATRICE, DIM_MATRICE));
         jPanelMatrice.setFocusable(true);
         jPanelMatrice.requestFocusInWindow();
 
-        JTextField[][] cella = new JTextField[9][9];
+        JTextField[][] cella = new JTextField[DIM_MATRICE][DIM_MATRICE];
 
-        for (int riga = 0; riga < 9; riga++) {
-            for (int colonna = 0; colonna < 9; colonna++) {
+        for (int riga = 0; riga < DIM_MATRICE; riga++) {
+            for (int colonna = 0; colonna < DIM_MATRICE; colonna++) {
                 cella[riga][colonna] = new JTextField();
                 cella[riga][colonna].setEditable(false);
                 cella[riga][colonna].setHorizontalAlignment(JTextField.CENTER);
                 cella[riga][colonna].setFont(FONT_NUMBERS);
+
+                cella[riga][colonna].setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black));
+
+                if (riga % 3 == 0)
+                    cella[riga][colonna].setBorder(BorderFactory.createMatteBorder(4, 1, 1, 1, Color.black));
+
+                if (colonna % 3 == 0)
+                    cella[riga][colonna].setBorder(BorderFactory.createMatteBorder(1, 4, 1, 1, Color.black));
+
+                if (riga % 3 == 0 && colonna % 3 == 0)
+                    cella[riga][colonna].setBorder(BorderFactory.createMatteBorder(4, 4, 1, 1, Color.black));
 
                 if (matrice[riga][colonna] == 0) {
                     cella[riga][colonna].setText("");
@@ -84,6 +96,7 @@ public class GUI {
                     cella[riga][colonna].setText(matrice[riga][colonna] + "");
                     cella[riga][colonna].setBackground(CLOSED_CELL_BGCOLOR);
                 }
+
                 jPanelMatrice.add(cella[riga][colonna]);
             }
         }
@@ -102,7 +115,7 @@ public class GUI {
 
         for (int i = 0; i < num_matrici; i++) {
 
-            JButton jButton = new JButton("MATRICE " + (i + 1));
+            JButton jButton = new JButton("GRIGLIA " + (i + 1));
 
             int finalI = i + 1;
 
@@ -121,7 +134,7 @@ public class GUI {
         JLabel label = new JLabel("", imageIcon, JLabel.CENTER);
         jPanelMenu.add(label);
 
-        JButton jButtonCarica = new JButton("CARICA FILE");
+        JButton jButtonCarica = new JButton("CARICA GRIGLIA");
 
         jButtonCarica.addActionListener(new ActionListener() {
             @Override
