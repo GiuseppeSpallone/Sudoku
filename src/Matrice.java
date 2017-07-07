@@ -2,9 +2,15 @@ import javax.swing.*;
 import java.io.File;
 import java.util.Scanner;
 
+//RIF. INIZIALE: contiene metodi statici per fare operazione su matrici
+//RIF. 1: prende in input un percorso dove è presente un file di testo che rappresenta una matrice e restutuisce la matrice
+//RIF. 2: prende in input una matrice e stampa su console la matrice sotto forma di griglia Sudoku, sostituindo gli elementi con valori 0 con elementi con valori nulli
+//RIF 3. permette di scegliere un file presente nel PC e restituisce il percorso del file
+
 public class Matrice {
     private static int DIMENSIONE = 9;
 
+    //RIF. 1
     public static int[][] caricaMatriceByFile(String path) {
         File file = new File(path);
         int righe = DIMENSIONE;
@@ -31,6 +37,7 @@ public class Matrice {
         return matrice;
     }
 
+    //RIF. 2
     public static void stampaMatrice(int matrice[][]) {
         if (matrice != null) {
             int righe = 9;
@@ -54,6 +61,7 @@ public class Matrice {
 
     }
 
+    //RIF. 3
     public static String apriMatrice() {
         JFileChooser jFileChooser = new JFileChooser();
 
