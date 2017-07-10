@@ -56,7 +56,7 @@ public class Risolutore {
                 if (matrice[x][y] == valore)
                     return false;
 
-        // se il valore non è presente nella riga, nella colonna e nel rettangolo di selezione, return true
+        // se il valore non è presente nella riga, nella colonna e nella regione, return true
         return true;
     }
 
